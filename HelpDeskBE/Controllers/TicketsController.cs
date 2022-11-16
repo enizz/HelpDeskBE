@@ -25,8 +25,8 @@ namespace HelpDeskBE.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTickets()
         {
-            //return await _context.Tickets.ToListAsync();
-            return await _context.Tickets.Where(x => x.Favorited == true).ToListAsync();
+            return await _context.Tickets.ToListAsync();
+            //return await _context.Tickets.Where(x => x.Favorited == true).ToListAsync();
         }
 
         // GET: api/Tickets/5
@@ -42,6 +42,7 @@ namespace HelpDeskBE.Controllers
 
             return ticket;
         }
+        
 
         // PUT: api/Tickets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
