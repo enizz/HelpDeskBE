@@ -25,7 +25,8 @@ namespace HelpDeskBE.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTickets()
         {
-            return await _context.Tickets.ToListAsync();
+            //return await _context.Tickets.ToListAsync();
+            return await _context.Tickets.Where(x => x.Favorited == true).ToListAsync();
         }
 
         // GET: api/Tickets/5
@@ -44,7 +45,7 @@ namespace HelpDeskBE.Controllers
 
         // PUT: api/Tickets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("resolve/{id}")]
         public async Task<IActionResult> ResolveTicket(int id, string resolution, string username)
         {
             try
@@ -61,6 +62,21 @@ namespace HelpDeskBE.Controllers
             {
                 return BadRequest();
             }
+        }
+        [HttpPut("addfavorite/{id}")]
+        public async Task<IActionResult> FavoriteTicket (int id, string username)
+        {
+            var ticket = await _context.Tickets.FindAsync(id);
+            ticket.Favorited = true;
+            await _context.SaveChangesAsync();
+            var ft = new Favorite
+            {
+                FavoritedBy = username,
+                TicketId = id
+            };
+            _context.Favorites.Add(ft);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         // POST: api/Tickets
