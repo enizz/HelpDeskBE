@@ -13,6 +13,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<TicketDbContext>(options => options.UseSqlServer(
     builder.Configuration["DefaultConnection"]));
 
+//allow our Angular app to talk to our C# API by setting up CORS and bypassing the default Same-Origin Policybuilder.Services.AddCors(options =>{options.AddDefaultPolicy(policy =>{policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();});})
+
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
@@ -34,6 +37,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 
