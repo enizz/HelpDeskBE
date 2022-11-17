@@ -11,5 +11,5 @@ public partial class Favorite
 
     public int? TicketId { get; set; }
 
-    public virtual Ticket? Ticket { get; set; }
+    //public virtual Ticket? Ticket { get; set; }
 }

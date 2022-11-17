@@ -31,9 +31,10 @@ public partial class TicketDbContext : DbContext
 
             entity.Property(e => e.FavoritedBy).HasMaxLength(30);
 
-            entity.HasOne(d => d.Ticket).WithMany(p => p.Favorites)
-                .HasForeignKey(d => d.TicketId)
-                .HasConstraintName("FK__Favorites__Ticke__3C69FB99");
+            //entity.HasOne(d => d.Ticket).WithMany(p => p.Favorites)
+            //.HasForeignKey(d => d.TicketId)
+            //.HasConstraintName("FK__Favorites__Ticke__3C69FB99");
+            entity.Property(e => e.TicketId);
         });
 
         modelBuilder.Entity<Ticket>(entity =>

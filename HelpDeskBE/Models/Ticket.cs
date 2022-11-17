@@ -19,5 +19,5 @@ public partial class Ticket
 
     public bool? Favorited { get; set; }
 
-    public virtual ICollection<Favorite> Favorites { get; } = new List<Favorite>();
+    //public virtual ICollection<Favorite> Favorites { get; } = new List<Favorite>();
 }

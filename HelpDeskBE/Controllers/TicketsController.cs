@@ -46,23 +46,41 @@ namespace HelpDeskBE.Controllers
 
         // PUT: api/Tickets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("resolve/{id}")]
-        public async Task<IActionResult> ResolveTicket(int id, string resolution, string username)
+        [HttpPut]
+        public async Task<IActionResult> ResolveTicket(Ticket ticket)
         {
-            try
-            {
-                var ticket = await _context.Tickets.FindAsync(id);
-                ticket.Resolution = resolution;
-                ticket.ResolvedBy = username;
-                ticket.Resolved = true;
-                _context.Update(ticket);
-                await _context.SaveChangesAsync();
-                return Ok();
-            }
-            catch
+            
+            _context.Entry(ticket).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+           
+
+            return NoContent();
+        }
+      
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutTicket(int id, Ticket ticket)
+        {
+            if (id != ticket.Id)
             {
                 return BadRequest();
             }
+            _context.Entry(ticket).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TicketExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return NoContent();
         }
         [HttpPut("addfavorite/{id}")]
         public async Task<IActionResult> FavoriteTicket (int id, string username)
@@ -83,21 +101,6 @@ namespace HelpDeskBE.Controllers
         // POST: api/Tickets
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        //public async Task<ActionResult<Ticket>> PostTicket(string name, string issue)
-        //{
-        //    var newTicket = new Ticket
-        //    {
-        //        OpenedBy = name,
-        //        Issue = issue,
-        //        Resolution = null,
-        //        ResolvedBy = null,
-        //        Resolved = false,
-        //        Favorited = false,
-        //    };
-        //    _context.Tickets.Add(newTicket);
-        //    await _context.SaveChangesAsync();
-        //    return newTicket;
-        //}
         public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
         {
             _context.Tickets.Add(ticket);
@@ -108,6 +111,8 @@ namespace HelpDeskBE.Controllers
         [HttpPost("addfav/")]
         public async Task<ActionResult<Ticket>>PostFavorite(Ticket ticket)
         {
+            ticket.Favorited = true;
+            await _context.SaveChangesAsync();
             var newFav = new Favorite
             {
                 
