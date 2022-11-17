@@ -61,8 +61,8 @@ namespace HelpDeskBE.Controllers
                 return NotFound();
             }
             var ticket = await _context.Tickets.FindAsync(favorite.TicketId);
-            ticket.Favorited = false;
-            await _context.SaveChangesAsync();
+            //ticket.Favorited = false;
+            //await _context.SaveChangesAsync();
             _context.Favorites.Remove(favorite);
             await _context.SaveChangesAsync();
 
