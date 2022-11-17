@@ -83,22 +83,39 @@ namespace HelpDeskBE.Controllers
         // POST: api/Tickets
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Ticket>> PostTicket(string name, string issue)
+        //public async Task<ActionResult<Ticket>> PostTicket(string name, string issue)
+        //{
+        //    var newTicket = new Ticket
+        //    {
+        //        OpenedBy = name,
+        //        Issue = issue,
+        //        Resolution = null,
+        //        ResolvedBy = null,
+        //        Resolved = false,
+        //        Favorited = false,
+        //    };
+        //    _context.Tickets.Add(newTicket);
+        //    await _context.SaveChangesAsync();
+        //    return newTicket;
+        //}
+        public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
         {
-            var newTicket = new Ticket
-            {
-                OpenedBy = name,
-                Issue = issue,
-                Resolution = null,
-                ResolvedBy = null,
-                Resolved = false,
-                Favorited = false,
-            };
-            _context.Tickets.Add(newTicket);
+            _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
-            return newTicket;
-        }
 
+            return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
+        }
+        [HttpPost("addfav/")]
+        public async Task<ActionResult<Ticket>>PostFavorite(Ticket ticket)
+        {
+            var newFav = new Favorite
+            {
+                
+                TicketId = ticket.Id
+            };
+            _context.Favorites.Add(newFav);
+            return Ok();
+        }
         // DELETE: api/Tickets/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTicket(int id)

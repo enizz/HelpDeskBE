@@ -41,7 +41,16 @@ namespace HelpDeskBE.Controllers
 
             return favorite;
         }
+        // POST: api/Favorites
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Favorite>> PostFavorite(Favorite favorite)
+        {
+            _context.Favorites.Add(favorite);
+            await _context.SaveChangesAsync();
 
+            return CreatedAtAction("GetFavorite", new { id = favorite.Id }, favorite);
+        }
         // PUT: api/Favorites/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         //[HttpPut("{id}")]
